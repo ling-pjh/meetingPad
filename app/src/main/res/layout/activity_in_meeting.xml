@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".InMeetingActivity"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:layout_margin="20dp"
+    android:background="#fefef0">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,22 +28,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="会议进行中"
-                android:textSize="50sp"
+                android:textSize="70sp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_weight="20"
                 android:gravity="center">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_image_blue_60dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="扫码预约"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_image_blue_60dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="扫码预约"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
