@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context=".CheckingActivity"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:layout_margin="20dp"
+    android:background="#fef0fe">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -23,28 +25,29 @@
                android:text="X405"
                android:textSize="24sp"
                android:id="@+id/tv_meeting_room_id_checking"/>
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="签到中"
-               android:textSize="50dp"/>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:gravity="center_vertical">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="签到中"
+                   android:textSize="70dp"/>
+           </LinearLayout>
 
        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="100">
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+            android:layout_weight="140"
+            android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="100"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
@@ -52,105 +55,33 @@
                             android:text="已到"
                             android:textSize="20sp"
                             android:layout_margin="10dp"/>
-                        <GridLayout
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="8" >
-                            <ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/><ImageView
-                                android:src="@drawable/ic_launcher"/>
-                        </GridLayout>
+                            android:layout_height="match_parent"
+                            android:id="@+id/recycler_view_checked_in_checking">
+
+                        </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="0dp"
+                        android:layout_weight="100">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="未到"
                             android:textSize="20sp"
                             android:layout_margin="10dp"/>
-                        <GridLayout
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="13">
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
-                            <ImageView
-                                android:src="@mipmap/ic_launcher"
-                                android:layout_margin="5dp"/>
+                            android:layout_height="match_parent"
+                            android:id="@+id/recycler_view_not_check_in_checking">
 
-
-                        </GridLayout>
+                        </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
-                </LinearLayout>
 
-            </ScrollView>
+
         </LinearLayout>
 
     </LinearLayout>
@@ -186,7 +117,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="这是会议概况"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:id="@+id/tv_meeting_information_in_checking"
+                android:background="@drawable/backgroud_stroke"/>
 
         </LinearLayout>
 
