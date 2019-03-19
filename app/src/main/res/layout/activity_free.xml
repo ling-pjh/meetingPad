@@ -37,9 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/qr_code_view_in_free">
                 <ImageView
-                    android:id="@+id/qr_code_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_image_blue_60dp"
@@ -117,7 +117,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/go_more_meeting_view">
+                android:id="@+id/go_more_meeting_view_in_free">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

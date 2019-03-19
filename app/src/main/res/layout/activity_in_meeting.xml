@@ -36,7 +36,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="20"
-                android:gravity="center">
+                android:gravity="center"
+                android:id="@+id/qr_code_view_in_meeting">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -64,7 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:20"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:id="@+id/tv_time_to_the_end_of_meeting"/>
 
         </LinearLayout>
 
@@ -87,12 +89,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:text="总部：月度总经理办公室会议"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:id="@+id/tv_meeting_title_in_meeting"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9:00-9:50"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:id="@+id/tv_meeting_time_in_meeting"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +108,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="总结2010年3月的工作，计划2010年4月的工作"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:id="@+id/tv_meeting_information_in_meeting"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -130,37 +135,44 @@
                 android:layout_height="wrap_content"
                 android:text="10:20 - 11:30"
                 android:textSize="20sp"
-                android:layout_weight="100"/>
+                android:layout_weight="100"
+                android:id="@+id/tv_next_meeting_time_in_meeting"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="行政部周例会"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:id="@+id/tv_next_meeting_title_in_meeting"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/go_more_meeting_view_in_meeting">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="更多会议"
-                android:textSize="24sp"
-                android:gravity="center_vertical"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="更多会议"
+                    android:textSize="24sp"
+                    android:gravity="center_vertical"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_chevron_right_black_24dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_chevron_right_black_24dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_chevron_right_black_24dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_chevron_right_black_24dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
