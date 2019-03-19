@@ -29,7 +29,7 @@ public class FreeActivity extends AppCompatActivity {
         tvMeetingRoomId.setText(i.getStringExtra("meetingRoomId"));
 
 
-        qrCodeView=(ImageView)findViewById(R.id.qr_code_view_in_free);
+        qrCodeView=(ImageView)findViewById(R.id.qr_code_image_view_in_free);
         titleTV=(TextView)findViewById(R.id.tv_meeting_title_in_free);
         timeTV=(TextView)findViewById(R.id.tv_meeting_time_in_free);
         informationTV=(TextView)findViewById(R.id.tv_meeting_information_in_free);

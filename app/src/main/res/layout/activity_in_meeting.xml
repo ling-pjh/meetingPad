@@ -36,12 +36,12 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="20"
-                android:gravity="center"
-                android:id="@+id/qr_code_view_in_meeting">
+                android:gravity="center">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_image_blue_60dp"/>
+                        android:src="@drawable/ic_image_blue_60dp"
+                        android:id="@+id/qr_code_image_view_in_meeting"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

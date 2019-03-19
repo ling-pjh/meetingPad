@@ -28,7 +28,7 @@ public class InMeetingActivity extends AppCompatActivity {
         nextMeetingTimeTV=(TextView)findViewById(R.id.tv_next_meeting_time_in_meeting);
         nextMeetingTitleTV=(TextView)findViewById(R.id.tv_next_meeting_title_in_meeting);
         timeToEndTV=(TextView)findViewById(R.id.tv_time_to_the_end_of_meeting);
-        qrCodeImageView=(View)findViewById(R.id.qr_code_view_in_meeting);
+        qrCodeImageView=(View)findViewById(R.id.qr_code_image_view_in_meeting);
         goMoreMeetingView=(View)findViewById(R.id.go_more_meeting_view_in_meeting);
 
 
