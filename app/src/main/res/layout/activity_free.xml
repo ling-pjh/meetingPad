@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:padding="20dp"
     android:orientation="vertical"
+    android:background="#f0fefe"
     tools:context=".FreeActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,20 +23,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="空闲"
-                android:textSize="50dp"
+                android:textSize="70dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="100"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="50"
                 android:orientation="vertical">
                 <ImageView
+                    android:id="@+id/qr_code_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_image_blue_60dp"
@@ -62,40 +67,43 @@
 
 
         <LinearLayout
-            android:padding="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="100"
-            android:background="@drawable/backgroud_stroke"
-            android:orientation="vertical">
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-                <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="100"
-                android:text="总部：月度总经理办公室会议"
-                android:textSize="24sp"/>
-                <TextView
-                android:layout_width="wrap_content"
+                android:background="@drawable/backgroud_stroke"
+                android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="9:00-9:50"
-                android:textSize="24sp"/>
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:text="总部：月度总经理办公室会议"
+                    android:textSize="24sp"
+                    android:id="@+id/tv_meeting_title_in_free"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9:00-9:50"
+                    android:textSize="24sp"
+                    android:id="@+id/tv_meeting_time_in_free"/>
             </LinearLayout>
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-                <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="总结2010年3月的工作，计划2010年4月的工作"
-                android:textSize="24sp"/>
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_meeting_information_in_free"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="总结2010年3月的工作，计划2010年4月的工作"
+                    android:textSize="24sp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -106,24 +114,29 @@
             android:gravity="right"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="更多会议"
-                android:textSize="24sp"
-                android:gravity="center_vertical"/>
+                android:id="@+id/go_more_meeting_view">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="更多会议"
+                    android:textSize="24sp"
+                    android:gravity="center_vertical"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_chevron_right_black_24dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_chevron_right_black_24dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_chevron_right_black_24dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_chevron_right_black_24dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
