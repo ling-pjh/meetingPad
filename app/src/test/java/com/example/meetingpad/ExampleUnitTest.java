@@ -35,12 +35,6 @@ public class ExampleUnitTest {
                 System.out.println("Main2Activity,timertask");
             }
         };
-        TimerTask toCheckIn= new TimerTask() {//转换为签到中时的任务
-            @Override
-            public void run() {
-
-            }
-        };
         assertEquals(4, 2 + 2);
         Date date = new Date(System.currentTimeMillis()+6000);
         //查到一个Event，取其开始时间减去10分钟设置切换为签到中task，全局变量timer，每新查到一个event，就schedule一系列切换行为

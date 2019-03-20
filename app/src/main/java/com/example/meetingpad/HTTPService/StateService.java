@@ -87,12 +87,15 @@ public class StateService extends Service {
     public void schedule(List<Event> eventList){
         for(Event e:eventList){
 //            十分钟：600000;
-            Date startTime = e.startTimeDate;
-            Date checkinTime = new Date(startTime.getTime()-60000);
-            Date endTime = e.endTimeDate;
-            timer.schedule(toCheckInState,checkinTime);
-            timer.schedule(toInMeetingState,startTime);
-            timer.schedule(toFreeState,endTime);
+//            Date startTime = e.startTimeDate;
+//            Date checkinTime = new Date(startTime.getTime()-60000);
+//            Date endTime = e.endTimeDate;
+            Date startTime = new Date(2019,2,20,18,15);
+            Date checkinTime = new Date(2019,2,20,18,14);
+            Date endTime = new Date(2019,2,20,18,16);
+            timer.schedule(toCheckInState,new Date(System.currentTimeMillis()+10000));
+            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+20000));
+            timer.schedule(toFreeState,new Date(System.currentTimeMillis()+30000));
             Log.i(TAG,"schedule");
         }
     }
