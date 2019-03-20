@@ -93,9 +93,9 @@ public class StateService extends Service {
             Date startTime = new Date(2019,2,20,18,15);
             Date checkinTime = new Date(2019,2,20,18,14);
             Date endTime = new Date(2019,2,20,18,16);
-            timer.schedule(toCheckInState,new Date(System.currentTimeMillis()+10000));
-            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+20000));
-            timer.schedule(toFreeState,new Date(System.currentTimeMillis()+30000));
+            //timer.schedule(toCheckInState,new Date(System.currentTimeMillis()+10000));
+            //timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+20000));
+            //timer.schedule(toFreeState,new Date(System.currentTimeMillis()+30000));
             Log.i(TAG,"schedule");
         }
     }
