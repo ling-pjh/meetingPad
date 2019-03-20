@@ -21,35 +21,7 @@ public class StateService extends Service {
     private static final List<Event> eventList = new ArrayList<>();
     private static final Timer timer = new Timer();
 
-    TimerTask toCheckInState = new TimerTask() {//转换为签到中时的任务
-        @Override
-        public void run() {
-            Intent intent=new Intent(StateService.this, CheckingActivity.class);
-//            intent.putExtra("mNo",mNo);
-            intent.putExtra("meetingRoomId","A001");
-            Log.i(TAG,"toCheckInState");
-            startActivity(intent);
-        }
-    };
-    TimerTask toInMeetingState= new TimerTask() {//转换为签到中时的任务
-        @Override
-        public void run() {
-            Intent intent=new Intent(StateService.this, InMeetingActivity.class);
-            intent.putExtra("meetingRoomId","A001");
-            Log.i(TAG,"toInMeetingState");
-//            intent.putExtra("mNo",mNo);
-            startActivity(intent);
-        }
-    };
-    TimerTask toFreeState= new TimerTask() {//转换为签到中时的任务
-        @Override
-        public void run() {
-            Intent intent=new Intent(StateService.this, FreeActivity.class);
-            intent.putExtra("meetingRoomId","A001");
-//            intent.putExtra("mNo",mNo);
-            startActivity(intent);
-        }
-    };
+
 
 
     public StateService() {
@@ -64,12 +36,14 @@ public class StateService extends Service {
     public void onCreate() {
         Log.i(TAG,"call onCreate...");
         //向服务器请求该房间的EventList
-        eventList.add(new Event(2,"A001",new Date(2019,2,20,17,32),
-                new Date(2019,2,20,17,45)));
+        eventList.add(new Event(2,"A001",new Date(System.currentTimeMillis()+15000),
+                new Date(System.currentTimeMillis()+30000)));
+        eventList.add(new Event(22,"A001",new Date(System.currentTimeMillis()+25000),
+                new Date(System.currentTimeMillis()+40000)));
+        eventList.add(new Event(2,"A001",new Date(System.currentTimeMillis()+35000),
+                new Date(System.currentTimeMillis()+50000)));
         //按照eventList schedule切换事件
         schedule(eventList);
-
-
     }
 
     @Override
@@ -81,21 +55,27 @@ public class StateService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG,"call onDestroy...");
+        timer.cancel();
     }
 
     //
     public void schedule(List<Event> eventList){
-        for(Event e:eventList){
+        for(final Event e:eventList){
 //            十分钟：600000;
 //            Date startTime = e.startTimeDate;
 //            Date checkinTime = new Date(startTime.getTime()-60000);
 //            Date endTime = e.endTimeDate;
-            Date startTime = new Date(2019,2,20,18,15);
-            Date checkinTime = new Date(2019,2,20,18,14);
-            Date endTime = new Date(2019,2,20,18,16);
-            timer.schedule(toCheckInState,new Date(System.currentTimeMillis()+10000));
-            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+20000));
-            timer.schedule(toFreeState,new Date(System.currentTimeMillis()+30000));
+//            Date startTime = new Date(2019,2,20,18,15);
+            timer.schedule(new TimerTask() {//转换为签到中时的任务
+                @Override
+                public void run() {
+                    Intent intent=new Intent(StateService.this, CheckingActivity.class);
+                    intent.putExtra("mNo",e.mNo);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Log.i(TAG,"toCheckInState");
+                    getApplication().startActivity(intent);
+                }
+            },new Date(e.startTimeDate.getTime()+6000));//设置开会前10分钟开启签到//现在是6秒
             Log.i(TAG,"schedule");
         }
     }
