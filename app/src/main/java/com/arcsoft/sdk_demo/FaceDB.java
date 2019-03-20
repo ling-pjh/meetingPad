@@ -43,14 +43,14 @@ public class FaceDB {
 	public static String gender_key = "Usho1DLSAk4nF2PPz6T1GqqnVcspV4EXr86nqD3MY7x";
 
 	static String mDBPath;
-	static List<FaceRegist> mRegister = new ArrayList<FaceRegist>();
+	public static List<FaceRegist> mRegister = new ArrayList<FaceRegist>();
 	static AFR_FSDKEngine mFREngine;
 	static AFR_FSDKVersion mFRVersion;
 	static boolean mUpgrade;
 
-	static class FaceRegist {
-		String mName;
-		Map<String, AFR_FSDKFace> mFaceList;
+	public static class FaceRegist {
+		public String mName;
+		public Map<String, AFR_FSDKFace> mFaceList;
 
 		public FaceRegist(String name) {
 			mName = name;
