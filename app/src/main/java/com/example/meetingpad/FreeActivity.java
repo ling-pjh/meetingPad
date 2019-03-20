@@ -11,14 +11,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arcsoft.facerecognition.AFR_FSDKEngine;
+
 public class FreeActivity extends AppCompatActivity {
 
     private ImageView qrCodeView;
     private TextView titleTV,timeTV,informationTV;
     private View goMoreMeetingView;
     private TextView tvMeetingRoomId;
+    static AFR_FSDKEngine mFREngine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFREngine = new AFR_FSDKEngine();
         getSupportActionBar().setTitle("空闲中");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_free);

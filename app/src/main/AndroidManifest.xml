@@ -3,8 +3,9 @@
     package="com.example.meetingpad">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".Application"
         android:allowBackup="true"
@@ -13,24 +14,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InMeetingActivity"
-            android:screenOrientation="landscape">
+        <service
+            android:name=".HTTPService.StateService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".HTTPService.TimerService"
+            android:exported="false" />
 
-        </activity>
-        <activity android:name=".CheckingActivity"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".InMeetingActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".CheckingActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FreeActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape">
-
-        </activity>
-        <activity android:name="com.arcsoft.sdk_demo.RegisterActivity">
-        </activity>
-        <activity android:name="com.arcsoft.sdk_demo.DetecterActivity">
-        </activity>
+            android:screenOrientation="landscape" />
+        <activity android:name="com.arcsoft.sdk_demo.RegisterActivity" />
+        <activity android:name="com.arcsoft.sdk_demo.DetecterActivity" />
         <activity android:name="com.arcsoft.sdk_demo.PermissionAcitivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,9 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.arcsoft.sdk_demo.Main2Activity">
-
-        </activity>
+        <activity android:name="com.arcsoft.sdk_demo.Main2Activity" />
     </application>
 
 </manifest>

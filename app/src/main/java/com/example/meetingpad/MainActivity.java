@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.meetingpad.HTTPService.StateService;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextMeetingRoomID;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startFreeActivity(String meetingRoomId){
         //启动空闲activity
+        Intent intent1 = new Intent(this, StateService.class);
+        startService(intent1);
         Intent intent=new Intent(MainActivity.this,FreeActivity.class);
         intent.putExtra("meetingRoomId",meetingRoomId);
         startActivity(intent);
