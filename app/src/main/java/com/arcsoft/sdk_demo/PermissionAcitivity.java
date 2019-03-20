@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.Process;
 import android.widget.Toast;
 
+import com.example.meetingpad.Application;
+import com.example.meetingpad.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 

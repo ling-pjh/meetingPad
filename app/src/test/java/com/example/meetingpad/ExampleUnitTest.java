@@ -32,7 +32,7 @@ public class ExampleUnitTest {
         TimerTask task= new TimerTask() {
             @Override
             public void run() {
-                System.out.println("MainActivity,timertask");
+                System.out.println("Main2Activity,timertask");
             }
         };
         TimerTask toCheckIn= new TimerTask() {//转换为签到中时的任务

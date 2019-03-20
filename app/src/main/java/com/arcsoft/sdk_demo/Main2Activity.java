@@ -20,9 +20,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.example.meetingpad.Application;
 import com.example.meetingpad.R;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class Main2Activity extends Activity implements OnClickListener {
 	private final String TAG = this.getClass().toString();
 
 	private static final int REQUEST_CODE_IMAGE_CAMERA = 1;
@@ -75,7 +76,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			String path = bundle.getString("imagePath");
 			Log.i(TAG, "path="+path);
 		} else if (requestCode == REQUEST_CODE_IMAGE_CAMERA && resultCode == RESULT_OK) {
-			Uri mPath = ((Application)(MainActivity.this.getApplicationContext())).getCaptureImage();
+			Uri mPath = ((Application)(Main2Activity.this.getApplicationContext())).getCaptureImage();
 			String file = getPath(mPath);
 			Bitmap bmp = Application.decodeImage(file);
 			startRegister(bmp, file);
@@ -119,7 +120,7 @@ public class MainActivity extends Activity implements OnClickListener {
 										ContentValues values = new ContentValues(1);
 										values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 										Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-										((Application)(MainActivity.this.getApplicationContext())).setCaptureImage(uri);
+										((Application)(Main2Activity.this.getApplicationContext())).setCaptureImage(uri);
 										intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 										startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
 										break;
@@ -260,7 +261,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	 * @param mBitmap
 	 */
 	private void startRegister(Bitmap mBitmap, String file) {
-		Intent it = new Intent(MainActivity.this, RegisterActivity.class);
+		Intent it = new Intent(Main2Activity.this, RegisterActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("imagePath", file);
 		it.putExtras(bundle);
@@ -268,7 +269,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	private void startDetector(int camera) {
-		Intent it = new Intent(MainActivity.this, DetecterActivity.class);
+		Intent it = new Intent(Main2Activity.this, DetecterActivity.class);
 		it.putExtra("Camera", camera);
 		startActivityForResult(it, REQUEST_CODE_OP);
 	}

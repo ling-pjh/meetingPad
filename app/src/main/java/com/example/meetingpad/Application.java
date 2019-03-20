@@ -1,4 +1,4 @@
-package com.arcsoft.sdk_demo;
+package com.example.meetingpad;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,14 +7,16 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
 
+import com.arcsoft.sdk_demo.FaceDB;
+
 /**
  * Created by gqj3375 on 2017/4/28.
  */
 
 public class Application extends android.app.Application {
 	private final String TAG = this.getClass().toString();
-	FaceDB mFaceDB;
-	Uri mImage;
+	public FaceDB mFaceDB;
+	public Uri mImage;
 
 	@Override
 	public void onCreate() {
