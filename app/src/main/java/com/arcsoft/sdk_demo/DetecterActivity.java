@@ -55,8 +55,8 @@ import java.util.List;
  */
 
 public class DetecterActivity extends Activity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback, View.OnClickListener {
-
 	private final String TAG = this.getClass().getSimpleName();
+
 	private int mWidth, mHeight, mFormat;
 	private CameraSurfaceView mSurfaceView;
 	private CameraGLSurfaceView mGLSurfaceView;
@@ -219,15 +219,14 @@ public class DetecterActivity extends Activity implements OnCameraListener, View
 		super.onCreate(savedInstanceState);
 
 		mCameraID = getIntent().getIntExtra("Camera", 0) == 0 ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
-		//		mCameraRotate = getIntent().getIntExtra("Camera", 0) == 0 ? 90 : 270;
-		mCameraRotate = 90;
-//		mCameraMirror = getIntent().getIntExtra("Camera", 0) == 0 ? GLES2Render.MIRROR_NONE : GLES2Render.MIRROR_X;
-		mCameraMirror =GLES2Render.MIRROR_NONE;
+		mCameraRotate = getIntent().getIntExtra("Camera", 0) == 0 ? 90 : 270;
+		mCameraMirror = getIntent().getIntExtra("Camera", 0) == 0 ? GLES2Render.MIRROR_NONE : GLES2Render.MIRROR_X;
 		mWidth = 1280;
 		mHeight = 960;
 		mFormat = ImageFormat.NV21;
 		mHandler = new Handler();
 
+		setContentView(R.layout.activity_camera);
 		mGLSurfaceView = (CameraGLSurfaceView) findViewById(R.id.glsurfaceView);
 		mGLSurfaceView.setOnTouchListener(this);
 		mSurfaceView = (CameraSurfaceView) findViewById(R.id.surfaceView);
@@ -392,8 +391,8 @@ public class DetecterActivity extends Activity implements OnCameraListener, View
 		if (view.getId() == R.id.imageButton) {
 			if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
-				mCameraRotate = 90;
-				mCameraMirror = GLES2Render.MIRROR_NONE;
+				mCameraRotate = 270;
+				mCameraMirror = GLES2Render.MIRROR_X;
 			} else {
 				mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
 				mCameraRotate = 90;
