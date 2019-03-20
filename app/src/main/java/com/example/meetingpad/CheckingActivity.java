@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.meetingpad.HTTPService.OKHTTP;
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
@@ -57,13 +58,22 @@ import com.guo.android_extend.java.ExtByteArrayOutputStream;
 import com.guo.android_extend.widget.CameraGLSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.IOException;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class CheckingActivity extends AppCompatActivity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback, View.OnClickListener{
 
@@ -72,6 +82,8 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
     private CameraSurfaceView mSurfaceView;
     private CameraGLSurfaceView mGLSurfaceView;
     private Camera mCamera;
+    private int mNo;
+    private Meeting meetingDetail;//用来保存这个页面的一切动态信息
 
     AFT_FSDKVersion version = new AFT_FSDKVersion();
     AFT_FSDKEngine engine = new AFT_FSDKEngine();
@@ -356,17 +368,28 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             intent.putExtra("meetingRoomId","A001");
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.i("CheckingActivity","toInMeetingState");
-//            intent.putExtra("mNo",mNo);
+            intent.putExtra("mNo",mNo);
             startActivity(intent);
+            finish();
         }
     };
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            //获取参数
+            mNo=getIntent().getIntExtra("mNo",0);
+            //发请求查到meeting
+            HashMap<String, String> map = new HashMap();
+            map.put("mNo", mNo+"");//传进来的mNo
+            //查询对应会议详情
+            OKHTTP.postForm("/meeting/detail.do", map, fillMeetingDetail);
+
+            //定时操作
             Timer timer = new Timer();
-            //设置周期性刷新签到表
-            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+5000));
+            //TODO 设置周期性刷新签到表
+            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+6000));//设置十分钟后转入InMeeting//现在设置的是6秒
+
             setContentView(R.layout.activity_checking);
             getSupportActionBar().setTitle("签到中");
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -483,4 +506,34 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         }
         return super.onOptionsItemSelected(item);
     }
+
+    final Callback fillMeetingDetail = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+
+            //            toastHandler.sendEmptyMessage(REQUESTFAIL);
+            System.err.println("请求出错");
+        }
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+//            toastHandler.sendEmptyMessage(REQUESTSUCCESS);
+            System.err.println("请求成功");
+            if (response != null) {
+                String jsStr = response.body().string();//查看返回的response内容
+                System.err.println(jsStr);
+                try {
+                    JSONTokener jsonParser = new JSONTokener(jsStr);
+                    JSONObject noteResult = (JSONObject) jsonParser.nextValue();
+                    JSONObject joMeeting = noteResult.getJSONObject("data");
+                    meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+//                toastHandler.sendEmptyMessage(REQUESTNULL);
+                System.err.println("null!");
+            }
+        }
+    };
 }

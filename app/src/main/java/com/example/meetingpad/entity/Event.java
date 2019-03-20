@@ -80,8 +80,12 @@ public class Event {
 			eve.endTime = endHour+":"+endMin;
 			eve.endTimeDate = new Date(startYear,startMonth,startDay,startHour,startMin);
 			eve.startTimeDate = new Date(startYear,startMonth,startDay,endHour,endMin);
-			JSONObject meeting = event.getJSONObject("meeting");
-			eve.meeting = Meeting.fromJSONObject(meeting);
+			try {
+				JSONObject meeting = event.getJSONObject("meeting");
+				eve.meeting = Meeting.fromJSONObject(meeting);
+			} catch (JSONException e) {
+				eve.meeting = null;
+			}
 			return eve;
 		} catch (JSONException e) {
 			e.printStackTrace();

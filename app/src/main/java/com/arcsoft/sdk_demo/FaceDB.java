@@ -9,6 +9,7 @@ import com.arcsoft.facerecognition.AFR_FSDKError;
 import com.arcsoft.facerecognition.AFR_FSDKFace;
 import com.arcsoft.facerecognition.AFR_FSDKVersion;
 import com.example.meetingpad.HTTPService.OKHTTP;
+import com.example.meetingpad.entity.Meeting;
 import com.guo.android_extend.java.ExtInputStream;
 import com.guo.android_extend.java.ExtOutputStream;
 
@@ -47,6 +48,7 @@ public class FaceDB {
 	static AFR_FSDKEngine mFREngine;
 	static AFR_FSDKVersion mFRVersion;
 	static boolean mUpgrade;
+
 
 	public static class FaceRegist {
 		public String mName;

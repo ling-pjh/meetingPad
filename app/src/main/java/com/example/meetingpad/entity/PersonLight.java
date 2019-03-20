@@ -45,10 +45,9 @@ public class PersonLight implements Serializable {
 			pl.pDept=jo.getString("pDept");
 			String iconStr = jo.getString("pIcon");
 			pl.pIcon = Base64.decode(iconStr,Base64.NO_WRAP);
-			//pl.pIcon=jo.get("pId");//FIXME 头像怎么存
 			pl.pName=jo.getString("pName");
 			pl.pRole=jo.getString("pRole");
-			pl.state=jo.getString("state");
+//			pl.state=jo.getString("state");
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return new PersonLight();
