@@ -78,23 +78,5 @@ public class OKHTTP {
     }
 
 
-//    //同步的post请求方法
-//    public static String post(String subUrl, String json) throws IOException {
-//        RequestBody body = RequestBody.create(JSON, json);
-//        System.out.println( body.toString());
-//
-//        Request request = new Request.Builder()
-//                .url(BASE_URL_TEST+subUrl)
-//                .post(body)
-//                .build();
-//        System.out.println( request.toString());
-//        Response response = client.newCall(request).execute();
-//        if (response.isSuccessful()) {
-//            return response.body().string();
-//        } else {
-//            throw new IOException("Unexpected code " + response);
-//        }
-//    }
-//
 
 }
