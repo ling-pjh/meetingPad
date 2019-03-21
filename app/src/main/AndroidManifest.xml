@@ -15,11 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".HTTPService.StateService"
+            android:name=".Service.StateService"
             android:enabled="true"
             android:exported="true"></service>
         <service
-            android:name=".HTTPService.TimerService"
+            android:name=".Service.TimerService"
             android:exported="false" />
 
         <activity

@@ -78,8 +78,8 @@ public class Event {
 			eve.startDate = startYear+"-"+startMonth+"-"+startDay;
 			eve.startTime = startHour+":"+startMin;
 			eve.endTime = endHour+":"+endMin;
-			eve.endTimeDate = new Date(startYear,startMonth,startDay,startHour,startMin);
-			eve.startTimeDate = new Date(startYear,startMonth,startDay,endHour,endMin);
+			eve.endTimeDate = new Date(startYear-1900,startMonth-1,startDay,startHour,startMin);
+			eve.startTimeDate = new Date(startYear-1900,startMonth-1,startDay,endHour,endMin);
 			try {
 				JSONObject meeting = event.getJSONObject("meeting");
 				eve.meeting = Meeting.fromJSONObject(meeting);
@@ -108,6 +108,17 @@ public class Event {
 		}
 	}
 
-
-
+	@Override
+	public String toString() {
+		return "Event{" +
+				"mNo=" + mNo +
+				", rId='" + rId + '\'' +
+				", startDate='" + startDate + '\'' +
+				", startTime='" + startTime + '\'' +
+				", endTime='" + endTime + '\'' +
+				", startTimeDate=" + startTimeDate +
+				", endTimeDate=" + endTimeDate +
+				", meeting=" + meeting +
+				'}';
+	}
 }

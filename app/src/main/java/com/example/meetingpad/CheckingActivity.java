@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.meetingpad.HTTPService.OKHTTP;
+import com.example.meetingpad.Service.OKHTTP;
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
@@ -46,10 +46,8 @@ import com.arcsoft.genderestimation.ASGE_FSDKError;
 import com.arcsoft.genderestimation.ASGE_FSDKFace;
 import com.arcsoft.genderestimation.ASGE_FSDKGender;
 import com.arcsoft.genderestimation.ASGE_FSDKVersion;
-import com.arcsoft.sdk_demo.DetecterActivity;
 import com.arcsoft.sdk_demo.FaceDB;
 import com.example.meetingpad.Adapter.AttendMeetingListAdapter;
-import com.example.meetingpad.HTTPService.StateService;
 import com.example.meetingpad.entity.Meeting;
 import com.example.meetingpad.entity.PersonLight;
 import com.guo.android_extend.GLES2Render;
@@ -63,7 +61,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

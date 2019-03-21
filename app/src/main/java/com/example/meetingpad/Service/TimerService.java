@@ -1,4 +1,4 @@
-package com.example.meetingpad.HTTPService;
+package com.example.meetingpad.Service;
 
 import android.app.IntentService;
 import android.content.Intent;

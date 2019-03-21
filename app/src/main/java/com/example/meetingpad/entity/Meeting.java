@@ -69,8 +69,14 @@ public class Meeting {
 			m.mSize =meeting.getInt("mSize");
 			m.mSpan =meeting.getInt("mSpan");
 			m.pId_FQ =meeting.getString("pId_FQ");
-			JSONArray jsonArray = meeting.getJSONArray("mEventList");
-			m.mEventList = Event.fromJSONArray(jsonArray);
+			JSONArray jsonArray = null;
+			try {
+				jsonArray = meeting.getJSONArray("mEventList");
+				m.mEventList = Event.fromJSONArray(jsonArray);
+			} catch (JSONException e) {
+				m.mEventList =null;
+			}
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return new Meeting();

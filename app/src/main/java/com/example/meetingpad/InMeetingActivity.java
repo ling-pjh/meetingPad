@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.meetingpad.HTTPService.OKHTTP;
+import com.example.meetingpad.Service.OKHTTP;
 import com.example.meetingpad.entity.Event;
 import com.example.meetingpad.entity.Meeting;
 

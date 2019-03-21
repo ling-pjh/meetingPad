@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.arcsoft.sdk_demo.FaceDB;
-import com.example.meetingpad.HTTPService.StateService;
+import com.example.meetingpad.Service.StateService;
 
 /**
  * Created by gqj3375 on 2017/4/28.
@@ -25,8 +25,6 @@ public class Application extends android.app.Application {
 		super.onCreate();
 		mFaceDB = new FaceDB(this.getExternalCacheDir().getPath());
 		mImage = null;
-		Intent intent = new Intent(this, StateService.class);
-		startService(intent);
 	}
 
 	public void setCaptureImage(Uri uri) {

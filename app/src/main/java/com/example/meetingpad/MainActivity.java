@@ -1,15 +1,13 @@
 package com.example.meetingpad;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.meetingpad.HTTPService.StateService;
+import com.example.meetingpad.Service.StateService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -39,8 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent=new Intent(MainActivity.this,FreeActivity.class);
         intent.putExtra("meetingRoomId",meetingRoomId);
         startActivity(intent);
-    }
 
+    }
+    //TODO 其它按钮都可以取消了
     private void startCheckingActivity(String meetingRoomId){
         //启动签到中activity
         Intent intent=new Intent(MainActivity.this,CheckingActivity.class);

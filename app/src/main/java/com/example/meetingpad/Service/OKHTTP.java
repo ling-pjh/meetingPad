@@ -1,5 +1,7 @@
-package com.example.meetingpad.HTTPService;
+package com.example.meetingpad.Service;
 
+
+import android.util.Log;
 
 import net.sf.json.JSONObject;
 
@@ -15,13 +17,14 @@ import okhttp3.RequestBody;
 
 public class OKHTTP {
     //    试试发送给服务器的事前准备，初始化OkHttpClient
-    public final static int CONNECT_TIMEOUT = 8000;
+    public final static int CONNECT_TIMEOUT = 10000;
     public final static int READ_TIMEOUT = 100;
     public final static int WRITE_TIMEOUT = 60;
     public final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    public final static String BASE_URL_APP = "http://10.0.2.2:8080/face_meeting";
+    public final static String BASE_URL_SIMULATOR = "http://10.0.2.2:8080/face_meeting";
+    public final static String BASE_URL_APP = "http://192.168.1.101:8080/face_meeting";
     public final static String BASE_URL_TEST = "http://127.0.0.1:8080/face_meeting";
-    public final static String BASE_URL = BASE_URL_APP;
+    public static String BASE_URL = BASE_URL_APP;
 
     public static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
@@ -66,6 +69,7 @@ public class OKHTTP {
         FormBody.Builder builder = new FormBody.Builder();
         for (String key : paramsMap.keySet()) {
             //追加表单信息
+            Log.i("OKHTTP,paramsMap",key+":"+paramsMap.get(key));
             builder.add(key, paramsMap.get(key));
         }
         OkHttpClient client=new OkHttpClient();

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arcsoft.facerecognition.AFR_FSDKEngine;
+import com.example.meetingpad.Service.StateService;
 
 public class FreeActivity extends AppCompatActivity {
 
@@ -19,19 +20,25 @@ public class FreeActivity extends AppCompatActivity {
     private TextView titleTV,timeTV,informationTV;
     private View goMoreMeetingView;
     private TextView tvMeetingRoomId;
-    static AFR_FSDKEngine mFREngine;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mFREngine = new AFR_FSDKEngine();
-        getSupportActionBar().setTitle("空闲中");
         super.onCreate(savedInstanceState);
+        //获取数据
+        Intent i=getIntent();
+        String rId = i.getStringExtra("meetingRoomId");
+        //启动空闲activity时启动状态管理服务
+//        if(StateService.)
+        Intent intent2 = new Intent(this, StateService.class);
+        intent2.putExtra("rId",rId);
+        startService(intent2);
+
+
+        getSupportActionBar().setTitle("空闲中");
         setContentView(R.layout.activity_free);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tvMeetingRoomId=(TextView)findViewById(R.id.tv_meeting_room_id_free);
-        Intent i=getIntent();
-        tvMeetingRoomId.setText(i.getStringExtra("meetingRoomId"));
+        tvMeetingRoomId.setText(rId);
 
 
         qrCodeView=(ImageView)findViewById(R.id.qr_code_image_view_in_free);
@@ -54,4 +61,14 @@ public class FreeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //关闭空闲activity时关闭状态管理服务
+        Intent stopIntent = new Intent(this,StateService.class);
+        stopService(stopIntent);//停止服务
+    }
+
+
 }
