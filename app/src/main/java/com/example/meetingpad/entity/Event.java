@@ -78,6 +78,7 @@ public class Event {
 			eve.startDate = startYear+"-"+startMonth+"-"+startDay;
 			eve.startTime = startHour+":"+startMin;
 			eve.endTime = endHour+":"+endMin;
+			//FIXME 字符串的startTime等都是对的，但这里的有谜之时差，而且开始和结束时间竟然是反的
 			eve.endTimeDate = new Date(startYear-1900,startMonth-1,startDay,startHour,startMin);
 			eve.startTimeDate = new Date(startYear-1900,startMonth-1,startDay,endHour,endMin);
 			try {

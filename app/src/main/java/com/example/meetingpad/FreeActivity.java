@@ -27,7 +27,6 @@ public class FreeActivity extends AppCompatActivity {
         Intent i=getIntent();
         String rId = i.getStringExtra("meetingRoomId");
         //启动空闲activity时启动状态管理服务
-//        if(StateService.)
         Intent intent2 = new Intent(this, StateService.class);
         intent2.putExtra("rId",rId);
         startService(intent2);

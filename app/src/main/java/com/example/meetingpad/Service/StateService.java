@@ -64,11 +64,11 @@ public class StateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(timer!=null){
+        if(timer!=null){//FIXME 就算这样也不能阻止它执行两遍
             return super.onStartCommand(intent, flags, startId);
         }
         //我们在onStartCommand方法中通过intent参数获取activity传过来的值。
-        rId =intent.getStringExtra("rId");
+        rId =intent.getStringExtra("rId");//FIXME 读到的是空值，所以这里暂时没采用
         Log.i(TAG,"call onStartCommand...");
         //向服务器请求该房间的EventList
         HashMap<String, String> map = new HashMap();
