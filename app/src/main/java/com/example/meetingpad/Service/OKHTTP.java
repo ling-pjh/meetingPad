@@ -22,7 +22,7 @@ public class OKHTTP {
     public final static int WRITE_TIMEOUT = 60;
     public final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public final static String BASE_URL_SIMULATOR = "http://10.0.2.2:8080/face_meeting";
-    public final static String BASE_URL_APP = "http://192.168.1.101:8080/face_meeting";
+    public final static String BASE_URL_APP = "http://192.168.191.1:8080/face_meeting";
     public final static String BASE_URL_TEST = "http://127.0.0.1:8080/face_meeting";
     public static String BASE_URL = BASE_URL_APP;
 

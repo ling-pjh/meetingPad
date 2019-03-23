@@ -81,10 +81,12 @@ public class AttendMeetingListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return persons.size();
+        int size=0;
+        if(persons!=null)size=persons.size();
+        return size;
     }
 
-    public void setPersons(ArrayList<PersonLight> persons) {
+    public void setPersons(List<PersonLight> persons) {
         this.persons = persons;
     }
 

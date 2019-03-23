@@ -25,15 +25,12 @@ public class FreeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //获取数据
-        System.out.println("这是FreeActivity的OnCreate");
         Intent i=getIntent();
         String rId = i.getStringExtra("meetingRoomId");
         //启动空闲activity时启动状态管理服务
         intentForStateService = new Intent(this, StateService.class);
         intentForStateService.putExtra("rId",rId);
         startService(intentForStateService);
-
-
         getSupportActionBar().setTitle("空闲中");
         setContentView(R.layout.activity_free);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -59,7 +56,6 @@ public class FreeActivity extends AppCompatActivity {
                 finish();
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

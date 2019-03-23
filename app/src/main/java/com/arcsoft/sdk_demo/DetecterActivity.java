@@ -284,6 +284,7 @@ public class DetecterActivity extends Activity implements OnCameraListener, View
 
 	@Override
 	public Camera setupCamera() {
+
 		// TODO Auto-generated method stub
 		mCamera = Camera.open(mCameraID);
 		try {

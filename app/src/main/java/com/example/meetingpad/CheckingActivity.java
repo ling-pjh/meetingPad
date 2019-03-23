@@ -10,10 +10,12 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -21,7 +23,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.arcsoft.sdk_demo.DetecterActivity;
 import com.example.meetingpad.Service.OKHTTP;
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
@@ -61,6 +65,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,14 +77,19 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+
 public class CheckingActivity extends AppCompatActivity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback, View.OnClickListener{
 
+
+    private final int FACE_GET_PEOPLE_SUCCESS=0;
+    private final int FACE_GET_PEOPLE_FAIL=1;
     private final String TAG = this.getClass().getSimpleName();
     private int mWidth, mHeight, mFormat;
     private CameraSurfaceView mSurfaceView;
     private CameraGLSurfaceView mGLSurfaceView;
     private Camera mCamera;
     private int mNo;
+    private PersonLight detectedPerson;
     private Meeting meetingDetail;//用来保存这个页面的一切动态信息
 
     AFT_FSDKVersion version = new AFT_FSDKVersion();
@@ -91,7 +101,24 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
     List<AFT_FSDKFace> result = new ArrayList<>();
     List<ASAE_FSDKAge> ages = new ArrayList<>();
     List<ASGE_FSDKGender> genders = new ArrayList<>();
+    private UIHandler myHandler=new UIHandler();
 
+    class UIHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what){
+                case FACE_GET_PEOPLE_FAIL:
+                    Toast.makeText(CheckingActivity.this,"人脸获取Person失败",Toast.LENGTH_SHORT).show();
+                    break;
+                case FACE_GET_PEOPLE_SUCCESS:
+                    Toast.makeText(CheckingActivity.this,"人脸获取Person成功",Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+        }
+    }
     int mCameraID;
     int mCameraRotate;
     int mCameraMirror;
@@ -167,14 +194,14 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     Log.d(TAG, "V=" + data);
                 }
             }
-            //parameters.setPreviewFpsRange(15000, 30000);
-            //parameters.setExposureCompensation(parameters.getMaxExposureCompensation());
-            //parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
-            //parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
-            //parmeters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-            //parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
-            //parameters.setColorEffect(Camera.Parameters.EFFECT_NONE);
-            mCamera.setParameters(parameters);
+//            parameters.setPreviewFpsRange(15000, 30000);
+//            parameters.setExposureCompensation(parameters.getMaxExposureCompensation());
+//            parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
+//            parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
+//            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
+//            parameters.setColorEffect(Camera.Parameters.EFFECT_NONE);
+//            mCamera.setParameters(parameters);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,6 +219,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
     @Override
     public boolean startPreviewImmediately() {
+
         return true;
     }
 
@@ -200,6 +228,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         AFT_FSDKError err = engine.AFT_FSDK_FaceFeatureDetect(data, width, height, AFT_FSDKEngine.CP_PAF_NV21, result);
         Log.d(TAG, "AFT_FSDK_FaceFeatureDetect =" + err.getCode());
         Log.d(TAG, "Face=" + result.size());
+
+
+
         for (AFT_FSDKFace face : result) {
             Log.d(TAG, "Face:" + face.toString());
         }
@@ -229,10 +260,12 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
     @Override
     public void onBeforeRender(CameraFrameData data) {
 
+
     }
 
     @Override
     public void onAfterRender(CameraFrameData data) {
+
         mGLSurfaceView.getGLES2Render().draw_rect((Rect[])data.getParams(), Color.GREEN, 2);
     }
 
@@ -255,6 +288,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
         @Override
         public void loop() {
+
             if (mImageNV21 != null) {
                 final int rotate = mCameraRotate;
 
@@ -262,9 +296,42 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                 AFR_FSDKError error = engine.AFR_FSDK_ExtractFRFeature(mImageNV21, mWidth, mHeight, AFR_FSDKEngine.CP_PAF_NV21, mAFT_FSDKFace.getRect(), mAFT_FSDKFace.getDegree(), result);
                 Log.d(TAG, "AFR_FSDK_ExtractFRFeature cost :" + (System.currentTimeMillis() - time) + "ms");
                 Log.d(TAG, "Face=" + result.getFeatureData()[0] + "," + result.getFeatureData()[1] + "," + result.getFeatureData()[2] + "," + error.getCode());
+
+//                HashMap<String,String> faceRequestMap=new HashMap<>();
+//
+//                String base64Str = Base64.encodeToString(result.getFeatureData(), Base64.NO_WRAP);
+//                faceRequestMap.put("face",base64Str);
+//                OKHTTP.postForm("/checkin/recognize.do",faceRequestMap,faceRequestCallBack);
+
+
                 AFR_FSDKMatching score = new AFR_FSDKMatching();
                 float max = 0.0f;
                 String name = null;
+
+
+
+                if(meetingDetail!=null) {
+                    for (PersonLight p : meetingDetail.getmAttendList()) {
+                        AFR_FSDKFace face = new AFR_FSDKFace();
+                        face.setFeatureData(p.getpFace());
+                        error = engine.AFR_FSDK_FacePairMatching(result, face, score);
+                        Log.d(TAG, "Score:" + score.getScore() + ",AFR_FSDK_FacePairMatching-" + error.getCode());
+                        if(score.getScore()>=0.6){
+                            for(PersonLight p1 : notCheckPeople){
+                                if(p.getpId()==p1.getpId()) {
+                                    checkedPeople.add(p1);
+                                    checkedPeopleAdapter.setPersons(checkedPeople);
+                                    checkedPeopleAdapter.notifyDataSetChanged();
+
+                                    notCheckPeople.remove(p1);
+                                    notCheckPeopleAdapter.setPersons(notCheckPeople);
+                                    notCheckPeopleAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                        }
+                    }
+                }
                 for (FaceDB.FaceRegist fr : mResgist) {
                     for (AFR_FSDKFace face : fr.mFaceList.values()) {
                         error = engine.AFR_FSDK_FacePairMatching(result, face, score);
@@ -326,16 +393,16 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     CheckingActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mTextView.setAlpha(1.0f);
-                            mTextView1.setVisibility(View.VISIBLE);
-                            mTextView1.setText( gender + "," + age);
-                            mTextView1.setTextColor(Color.RED);
-                            mTextView.setText(mNameShow);
-                            mTextView.setTextColor(Color.RED);
-                            mImageView.setImageAlpha(255);
-                            mImageView.setRotation(rotate);
-                            mImageView.setScaleY(-mCameraMirror);
-                            mImageView.setImageBitmap(bmp);
+//                            mTextView.setAlpha(1.0f);
+//                            mTextView1.setVisibility(View.VISIBLE);
+//                            mTextView1.setText( gender + "," + age);
+//                            mTextView1.setTextColor(Color.RED);
+//                            mTextView.setText(mNameShow);
+//                            mTextView.setTextColor(Color.RED);
+//                            mImageView.setImageAlpha(255);
+//                            mImageView.setRotation(rotate);
+//                            mImageView.setScaleY(-mCameraMirror);
+//                            mImageView.setImageBitmap(bmp);
                         }
                     });
                 }
@@ -346,6 +413,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
         @Override
         public void over() {
+
             AFR_FSDKError error = engine.AFR_FSDK_UninitialEngine();
             Log.d(TAG, "AFR_FSDK_UninitialEngine : " + error.getCode());
         }
@@ -353,8 +421,10 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
     private TextView tvMeetingRoomId;
     private RecyclerView checkedPeopleImages,notCheckPeopleImages;
-    private AttendMeetingListAdapter checkedPeopleAdapter,notCheckPeopleAdapter;
-    private List<PersonLight> checkedPeople,notCheckPeople;
+
+    private List<PersonLight> checkedPeople=new ArrayList<PersonLight>(),notCheckPeople=new ArrayList<PersonLight>();
+    private AttendMeetingListAdapter checkedPeopleAdapter=new AttendMeetingListAdapter(this,checkedPeople);
+    private AttendMeetingListAdapter notCheckPeopleAdapter=new AttendMeetingListAdapter(this,notCheckPeople);
     private TextView infomationTV;
     private Meeting meeting;//用来保存这个页面的一切动态信息
     //CheckingActivity不断刷新签到名单，并在十分钟过后自动跳转到InMeetingActivity
@@ -366,8 +436,8 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.i("CheckingActivity","toInMeetingState");
             intent.putExtra("mNo",mNo);
-            startActivity(intent);
-            finish();
+//            startActivity(intent);
+//            finish();
         }
     };
     @SuppressLint("ClickableViewAccessibility")
@@ -375,7 +445,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             //获取参数
-            mNo=getIntent().getIntExtra("mNo",0);
+            mNo=getIntent().getIntExtra("mNo",2);
             //发请求查到meeting
             HashMap<String, String> map = new HashMap();
             map.put("mNo", mNo+"");//传进来的mNo
@@ -395,10 +465,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             tvMeetingRoomId=(TextView)findViewById(R.id.tv_meeting_room_id_checking);
             tvMeetingRoomId.setText(getIntent().getStringExtra("meetingRoomId"));
 
-            checkedPeople=new ArrayList<>();
-            for(i=1;i<=30;i++)checkedPeople.add(new PersonLight());
-            notCheckPeople=new ArrayList<>();
-            for(i=1;i<=30;i++)notCheckPeople.add(new PersonLight());
+
 
 
             checkedPeopleAdapter=new AttendMeetingListAdapter(this,checkedPeople);
@@ -407,6 +474,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
             checkedPeopleImages=(RecyclerView)findViewById(R.id.recycler_view_checked_in_checking);
             checkedPeopleImages.setLayoutManager(new GridLayoutManager(this,6));
+
             notCheckPeopleImages=(RecyclerView)findViewById(R.id.recycler_view_not_check_in_checking);
             notCheckPeopleImages.setLayoutManager(new GridLayoutManager(this,6));
 
@@ -476,7 +544,12 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
         mFRAbsLoop = new FRAbsLoop();
         mFRAbsLoop.start();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -504,12 +577,58 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         return super.onOptionsItemSelected(item);
     }
 
+    //根据识别人脸识别结果来获取Person的回调函数
+//    final Callback faceRequestCallBack=new Callback() {
+//        @Override
+//        public void onFailure(Call call, IOException e) {
+//            myHandler.sendEmptyMessage(FACE_GET_PEOPLE_FAIL);
+//            System.err.println("通过人脸获取Person请求出错");
+//        }
+//
+//        @Override
+//        public void onResponse(Call call, Response response) throws IOException {
+//            myHandler.sendEmptyMessage(FACE_GET_PEOPLE_SUCCESS);
+//            System.err.println("通过人脸获取Person请求成功");
+//
+//            if (response != null) {
+//                String jsStr = response.body().string();//查看返回的response内容
+//                System.err.println(jsStr);
+//                try {
+//                    JSONTokener jsonParser = new JSONTokener(jsStr);
+//                    JSONObject noteResult = (JSONObject) jsonParser.nextValue();
+//                    JSONObject joPersonLight = noteResult.getJSONObject("data");
+//                    detectedPerson = PersonLight.fromJSONObject(joPersonLight);
+//                    for(int i=0;i<notCheckPeople.size();i++){
+//                        if(notCheckPeople.get(i).getpId()== detectedPerson.getpId()){
+//                            PersonLight p=notCheckPeople.get(i);
+//                            notCheckPeople.remove(i);
+//                            checkedPeople.add(p);
+//
+//                            notCheckPeopleAdapter.setPersons((ArrayList)notCheckPeople);
+//                            checkedPeopleAdapter.setPersons(checkedPeople);
+//
+//                            notCheckPeopleAdapter.notifyDataSetChanged();
+//                            checkedPeopleAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+////                toastHandler.sendEmptyMessage(REQUESTNULL);
+//                System.err.println("null!");
+//            }
+//        }
+//    };
+
     final Callback fillMeetingDetail = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
 
             //            toastHandler.sendEmptyMessage(REQUESTFAIL);
             System.err.println("请求出错");
+
         }
         @Override
         public void onResponse(Call call, Response response) throws IOException {
@@ -523,6 +642,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     JSONObject noteResult = (JSONObject) jsonParser.nextValue();
                     JSONObject joMeeting = noteResult.getJSONObject("data");
                     meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
+                    notCheckPeople=meetingDetail.mAttendList;
+                    notCheckPeopleAdapter.setPersons(notCheckPeople);
+                    notCheckPeopleAdapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

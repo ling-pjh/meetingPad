@@ -47,7 +47,6 @@ public class StateService extends Service {
     }
     @Override
     public void onCreate() {
-        System.out.println("这是StateService的onCreate");
         timer = null;
         rId = "default";
         Log.i(TAG,"call onCreate...");
@@ -65,16 +64,13 @@ public class StateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(timer!=null){//FIXME 就算这样也不能阻止它执行两遍
-            return super.onStartCommand(intent, flags, startId);
-        }
+
         //我们在onStartCommand方法中通过intent参数获取activity传过来的值。
         rId =intent.getStringExtra("rId");//FIXME 读到的是空值，所以这里暂时没采用
-        System.out.println("获取的rid是:"+rId);
         Log.i(TAG,"call onStartCommand...");
         //向服务器请求该房间的EventList
         HashMap<String, String> map = new HashMap();
-        map.put("rId", "A001");//传进来的rId
+        map.put("rId", rId);//传进来的rId
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         map.put("date", simpleDateFormat.format(date));
@@ -122,9 +118,9 @@ public class StateService extends Service {
         timer	= null;
     }
 
-    //
     private void schedule(List<Event> eventList){
         timer = new Timer();
+
         for(final Event e:eventList){
             Log.i(TAG,"schedule："+e.toString());
             timer.schedule(new TimerTask() {//转换为签到中时的任务
@@ -139,6 +135,5 @@ public class StateService extends Service {
             },new Date(e.startTimeDate.getTime()-6000));//设置开会前10分钟开启签到//现在是6秒
         }
     }
-
 
 }

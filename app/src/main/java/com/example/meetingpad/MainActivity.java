@@ -22,16 +22,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         btnOk1=(Button)findViewById(R.id.btn_ok1);
-        btnOk2=(Button)findViewById(R.id.btn_ok2);
-        btnOk3=(Button)findViewById(R.id.btn_ok3);
+        btnOk1.setOnClickListener(this);
 
-        btnOk2.setVisibility(View.GONE);
+
+        btnOk2=(Button)findViewById(R.id.btn_ok2);
+        btnOk2.setOnClickListener(this);
+//      btnOk2.setVisibility(View.GONE);
+
+        btnOk3=(Button)findViewById(R.id.btn_ok3);
+//       btnOk3.setOnClickListener(this);
         btnOk3.setVisibility(View.GONE);
+
+
         editTextMeetingRoomID=(EditText)findViewById(R.id.edit_text_meeting_room_id);
 
-        btnOk1.setOnClickListener(this);
-//        btnOk2.setOnClickListener(this);
-//        btnOk3.setOnClickListener(this);
+
+
+
+
+
     }
 
     private void startFreeActivity(String meetingRoomId){
@@ -72,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.btn_ok3:
                     startInMeetingActivity(editTextMeetingRoomID.getText().toString());
                     break;
+
             }
     }
 }
