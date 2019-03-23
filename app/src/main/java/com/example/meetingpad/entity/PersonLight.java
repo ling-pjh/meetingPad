@@ -46,8 +46,15 @@ public class PersonLight implements Serializable {
 			pl.pDept=jo.getString("pDept");
 			String iconStr = jo.getString("pIcon");
 			pl.pIcon = Base64.decode(iconStr,Base64.NO_WRAP);
-			String faceStr = jo.getString("pFace");
-			pl.pFace = Base64.decode(faceStr,Base64.NO_WRAP);
+			String faceStr = null;
+			try {
+				faceStr = jo.getString("pFace");
+				pl.pFace = Base64.decode(faceStr,Base64.NO_WRAP);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				pl.pFace = null;
+			}
+
 			pl.pName=jo.getString("pName");
 			pl.pRole=jo.getString("pRole");
 //			pl.state=jo.getString("state");

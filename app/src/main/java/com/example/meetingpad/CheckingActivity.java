@@ -313,8 +313,15 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                 if(meetingDetail!=null) {
                     for (PersonLight p : meetingDetail.getmAttendList()) {
                         AFR_FSDKFace face = new AFR_FSDKFace();
+                        if(p.getpFace()==null){
+                            System.err.println("nuuuuuullll");
+                        }else{
+                            System.err.println("nooooot");
+                        }
                         face.setFeatureData(p.getpFace());
                         error = engine.AFR_FSDK_FacePairMatching(result, face, score);
+                        Log.d(TAG, "MyFace=" + result.getFeatureData()[0] + "," + result.getFeatureData()[1] + "," + result.getFeatureData()[2] + "," + error.getCode());
+//                        Log.d(TAG, "Compare-face=" + face.getFeatureData()[0] + "," + face.getFeatureData()[1] + "," + face.getFeatureData()[2] + "," + error.getCode());
                         Log.d(TAG, "Score:" + score.getScore() + ",AFR_FSDK_FacePairMatching-" + error.getCode());
                         if(score.getScore()>=0.6){
                             for(PersonLight p1 : notCheckPeople){
@@ -644,7 +651,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
                     notCheckPeople=meetingDetail.mAttendList;
                     notCheckPeopleAdapter.setPersons(notCheckPeople);
-                    notCheckPeopleAdapter.notifyDataSetChanged();
+//                    notCheckPeopleAdapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

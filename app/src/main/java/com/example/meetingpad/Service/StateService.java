@@ -123,6 +123,7 @@ public class StateService extends Service {
 
         for(final Event e:eventList){
             Log.i(TAG,"schedule："+e.toString());
+            System.out.println("schedule：Event"+e.toString());
             timer.schedule(new TimerTask() {//转换为签到中时的任务
                 @Override
                 public void run() {
