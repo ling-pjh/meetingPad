@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.arcsoft.facerecognition.AFR_FSDKEngine;
 import com.example.meetingpad.Service.StateService;
 
+import java.util.Date;
+
 public class FreeActivity extends AppCompatActivity {
 
     private ImageView qrCodeView;
@@ -45,7 +47,6 @@ public class FreeActivity extends AppCompatActivity {
         informationTV=(TextView)findViewById(R.id.tv_meeting_information_in_free);
         goMoreMeetingView=(View)findViewById(R.id.go_more_meeting_view_in_free);
 
-
     }
 
     @Override
@@ -62,6 +63,7 @@ public class FreeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         //关闭空闲activity时关闭状态管理服务
 
         stopService(intentForStateService);//停止服务

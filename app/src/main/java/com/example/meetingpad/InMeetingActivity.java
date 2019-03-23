@@ -101,6 +101,18 @@ public class InMeetingActivity extends AppCompatActivity {
                     JSONObject joMeeting = noteResult.getJSONObject("data");
                     meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
                     Event event = meetingDetail.getmEventList().get(0);
+
+
+                    titleTV.setText(meetingDetail.getmTitle());
+                    timeTV.setText(meetingDetail.getmEventList().get(0).startTime+"--"+meetingDetail.getmEventList().get(0).endTime);
+                    informationTV.setText(meetingDetail.getmInfo());
+//                    nextMeetingTimeTV.setText(meetingDetail);
+//                    nextMeetingTitleTV;
+//                    timeToEndTV;
+//                    qrCodeImageView;
+//                    goMoreMeetingView;
+
+
                     //会议结束时转入空闲中状态
                     Timer timer = new Timer();
                     timer.schedule(toFreeState,event.endTimeDate);

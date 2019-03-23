@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.UpdateAppearance;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -81,8 +82,7 @@ import okhttp3.Response;
 public class CheckingActivity extends AppCompatActivity implements OnCameraListener, View.OnTouchListener, Camera.AutoFocusCallback, View.OnClickListener{
 
 
-    private final int FACE_GET_PEOPLE_SUCCESS=0;
-    private final int FACE_GET_PEOPLE_FAIL=1;
+    private final int UPDATE_IMAGES=0;
     private final String TAG = this.getClass().getSimpleName();
     private int mWidth, mHeight, mFormat;
     private CameraSurfaceView mSurfaceView;
@@ -109,11 +109,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             super.handleMessage(msg);
 
             switch (msg.what){
-                case FACE_GET_PEOPLE_FAIL:
-                    Toast.makeText(CheckingActivity.this,"人脸获取Person失败",Toast.LENGTH_SHORT).show();
-                    break;
-                case FACE_GET_PEOPLE_SUCCESS:
-                    Toast.makeText(CheckingActivity.this,"人脸获取Person成功",Toast.LENGTH_SHORT).show();
+                case UPDATE_IMAGES:
+                    checkedPeopleAdapter.notifyDataSetChanged();
+                    notCheckPeopleAdapter.notifyDataSetChanged();
                     break;
 
             }
@@ -328,11 +326,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                                 if(p.getpId()==p1.getpId()) {
                                     checkedPeople.add(p1);
                                     checkedPeopleAdapter.setPersons(checkedPeople);
-                                    checkedPeopleAdapter.notifyDataSetChanged();
-
                                     notCheckPeople.remove(p1);
                                     notCheckPeopleAdapter.setPersons(notCheckPeople);
-                                    notCheckPeopleAdapter.notifyDataSetChanged();
+                                    myHandler.sendEmptyMessage(UPDATE_IMAGES);
                                 }
 
                             }
@@ -651,7 +647,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
                     notCheckPeople=meetingDetail.mAttendList;
                     notCheckPeopleAdapter.setPersons(notCheckPeople);
-//                    notCheckPeopleAdapter.notifyDataSetChanged();
+                    myHandler.sendEmptyMessage(UPDATE_IMAGES);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
