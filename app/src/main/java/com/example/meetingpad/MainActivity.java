@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 import com.example.meetingpad.Service.StateService;
 
+import static android.view.View.GONE;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextMeetingRoomID;
@@ -23,17 +25,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOk2=(Button)findViewById(R.id.btn_ok2);
         btnOk3=(Button)findViewById(R.id.btn_ok3);
 
+        btnOk2.setVisibility(View.GONE);
+        btnOk3.setVisibility(View.GONE);
         editTextMeetingRoomID=(EditText)findViewById(R.id.edit_text_meeting_room_id);
 
         btnOk1.setOnClickListener(this);
-        btnOk2.setOnClickListener(this);
-        btnOk3.setOnClickListener(this);
+//        btnOk2.setOnClickListener(this);
+//        btnOk3.setOnClickListener(this);
     }
 
     private void startFreeActivity(String meetingRoomId){
         //启动空闲activity
-        Intent intent1 = new Intent(this, StateService.class);
-        startService(intent1);
+//        Intent intent1 = new Intent(this, StateService.class);
+//        startService(intent1);
         Intent intent=new Intent(MainActivity.this,FreeActivity.class);
         intent.putExtra("meetingRoomId",meetingRoomId);
         startActivity(intent);

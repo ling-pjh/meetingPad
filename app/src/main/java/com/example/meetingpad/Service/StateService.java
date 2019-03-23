@@ -47,6 +47,7 @@ public class StateService extends Service {
     }
     @Override
     public void onCreate() {
+        System.out.println("这是StateService的onCreate");
         timer = null;
         rId = "default";
         Log.i(TAG,"call onCreate...");
@@ -69,6 +70,7 @@ public class StateService extends Service {
         }
         //我们在onStartCommand方法中通过intent参数获取activity传过来的值。
         rId =intent.getStringExtra("rId");//FIXME 读到的是空值，所以这里暂时没采用
+        System.out.println("获取的rid是:"+rId);
         Log.i(TAG,"call onStartCommand...");
         //向服务器请求该房间的EventList
         HashMap<String, String> map = new HashMap();
@@ -114,6 +116,7 @@ public class StateService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG,"call onDestroy...");
+        if(timer==null)return;
         timer.cancel();//关闭服务时取消所有已安排的任务
         timer.purge();
         timer	= null;

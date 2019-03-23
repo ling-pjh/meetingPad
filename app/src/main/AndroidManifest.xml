@@ -15,9 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".Service.StateService"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:name=".Service.StateService"></service>
         <service
             android:name=".Service.TimerService"
             android:exported="false" />

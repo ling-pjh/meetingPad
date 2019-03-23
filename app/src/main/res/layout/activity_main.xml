@@ -34,7 +34,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="确定并启动空闲Activity"
+            android:text="确定"
             android:id="@+id/btn_ok1"
             android:background="#009688"
             android:textColor="#ffffff"

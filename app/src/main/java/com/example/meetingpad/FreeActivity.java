@@ -20,16 +20,18 @@ public class FreeActivity extends AppCompatActivity {
     private TextView titleTV,timeTV,informationTV;
     private View goMoreMeetingView;
     private TextView tvMeetingRoomId;
+    private Intent intentForStateService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //获取数据
+        System.out.println("这是FreeActivity的OnCreate");
         Intent i=getIntent();
         String rId = i.getStringExtra("meetingRoomId");
         //启动空闲activity时启动状态管理服务
-        Intent intent2 = new Intent(this, StateService.class);
-        intent2.putExtra("rId",rId);
-        startService(intent2);
+        intentForStateService = new Intent(this, StateService.class);
+        intentForStateService.putExtra("rId",rId);
+        startService(intentForStateService);
 
 
         getSupportActionBar().setTitle("空闲中");
@@ -65,8 +67,8 @@ public class FreeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //关闭空闲activity时关闭状态管理服务
-        Intent stopIntent = new Intent(this,StateService.class);
-        stopService(stopIntent);//停止服务
+
+        stopService(intentForStateService);//停止服务
     }
 
 
