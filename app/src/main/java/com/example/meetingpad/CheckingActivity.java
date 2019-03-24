@@ -151,7 +151,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         if (view.getId() == R.id.imageButton) {
             if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
-                mCameraRotate = 180;
+                mCameraRotate = 0;
                 mCameraMirror = GLES2Render.MIRROR_NONE;
             } else {
                 mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
@@ -322,16 +322,26 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 //                        Log.d(TAG, "Compare-face=" + face.getFeatureData()[0] + "," + face.getFeatureData()[1] + "," + face.getFeatureData()[2] + "," + error.getCode());
                         Log.d(TAG, "Score:" + score.getScore() + ",AFR_FSDK_FacePairMatching-" + error.getCode());
                         if(score.getScore()>=0.6){
-                            for(PersonLight p1 : notCheckPeople){
-                                if(p.getpId()==p1.getpId()) {
-                                    checkedPeople.add(p1);
-                                    checkedPeopleAdapter.setPersons(checkedPeople);
-                                    notCheckPeople.remove(p1);
-                                    notCheckPeopleAdapter.setPersons(notCheckPeople);
-                                    myHandler.sendEmptyMessage(UPDATE_IMAGES);
-                                }
+                            int i;
+                            List<PersonLight> newNotCheckPeople=new ArrayList<>();
+                            for(i=0;i<notCheckPeople.size();i++)
+                                newNotCheckPeople.add(notCheckPeople.get(i));
+                            for(i=0;i<notCheckPeople.size();i++){
+                                if(p.getpId()==notCheckPeople.get(i).getpId()) {
+                                    boolean exist=false;
+                                    for(PersonLight p1:checkedPeople){
+                                        if(p1.getpId()==p.getpId()){
+                                            exist=true;
+                                        }
+                                    }
+                                    if(!exist)checkedPeople.add(notCheckPeople.get(i));
 
+                                    newNotCheckPeople.remove(i);
+                                }
                             }
+                            notCheckPeopleAdapter.setPersons(newNotCheckPeople);
+                            checkedPeopleAdapter.setPersons(checkedPeople);
+                            myHandler.sendEmptyMessage(UPDATE_IMAGES);
                         }
                     }
                 }
@@ -396,16 +406,16 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     CheckingActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            mTextView.setAlpha(1.0f);
-//                            mTextView1.setVisibility(View.VISIBLE);
-//                            mTextView1.setText( gender + "," + age);
-//                            mTextView1.setTextColor(Color.RED);
-//                            mTextView.setText(mNameShow);
-//                            mTextView.setTextColor(Color.RED);
-//                            mImageView.setImageAlpha(255);
-//                            mImageView.setRotation(rotate);
-//                            mImageView.setScaleY(-mCameraMirror);
-//                            mImageView.setImageBitmap(bmp);
+                            mTextView.setAlpha(1.0f);
+                            mTextView1.setVisibility(View.VISIBLE);
+                            mTextView1.setText( gender + "," + age);
+                            mTextView1.setTextColor(Color.RED);
+                            mTextView.setText(mNameShow);
+                            mTextView.setTextColor(Color.RED);
+                            mImageView.setImageAlpha(255);
+                            mImageView.setRotation(rotate);
+                            mImageView.setScaleY(-mCameraMirror);
+                            mImageView.setImageBitmap(bmp);
                         }
                     });
                 }
@@ -505,7 +515,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             mCameraID=Camera.CameraInfo.CAMERA_FACING_FRONT;
 //        mCameraID = getIntent().getIntExtra("Camera", 0) == 0 ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
         //		mCameraRotate = getIntent().getIntExtra("Camera", 0) == 0 ? 90 : 270;
-        mCameraRotate = 180;
+        mCameraRotate = 0;
 //		mCameraMirror = getIntent().getIntExtra("Camera", 0) == 0 ? GLES2Render.MIRROR_NONE : GLES2Render.MIRROR_X;
         mCameraMirror = GLES2Render.MIRROR_NONE;
         mWidth = 640;
