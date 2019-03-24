@@ -227,8 +227,6 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         Log.d(TAG, "AFT_FSDK_FaceFeatureDetect =" + err.getCode());
         Log.d(TAG, "Face=" + result.size());
 
-
-
         for (AFT_FSDKFace face : result) {
             Log.d(TAG, "Face:" + face.toString());
         }
@@ -478,6 +476,10 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             tvMeetingRoomId=(TextView)findViewById(R.id.tv_meeting_room_id_checking);
             tvMeetingRoomId.setText(getIntent().getStringExtra("meetingRoomId"));
 
+            for(i=0;i<10;i++){
+                checkedPeople.add(new PersonLight());
+                notCheckPeople.add(new PersonLight());
+            }
 
 
 
@@ -519,7 +521,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 //		mCameraMirror = getIntent().getIntExtra("Camera", 0) == 0 ? GLES2Render.MIRROR_NONE : GLES2Render.MIRROR_X;
         mCameraMirror = GLES2Render.MIRROR_NONE;
         mWidth = 640;
-        mHeight = 38;
+        mHeight = 360;
         mFormat = ImageFormat.NV21;
         mHandler = new Handler();
 

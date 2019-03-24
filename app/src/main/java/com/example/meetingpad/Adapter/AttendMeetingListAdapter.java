@@ -72,7 +72,7 @@ public class AttendMeetingListAdapter extends RecyclerView.Adapter {
                 bitmap = BitmapFactory.decodeByteArray(headImage, 0, headImage.length);
             if (name == null) name = "空";
             if (bitmap == null) {
-            headImage = getByte(context, R.drawable.ic_account_circle_black_30dp);
+            headImage = getByte(context, R.drawable.head_image1);
             bitmap=BitmapFactory.decodeByteArray(headImage,0,headImage.length);
             }
             vh.getNameTextView().setText(name);
