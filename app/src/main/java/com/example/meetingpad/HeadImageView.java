@@ -3,6 +3,7 @@ package com.example.meetingpad;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -16,8 +17,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 
-@SuppressLint("AppCompatCustomView")
-public class HeadImageView extends ImageView {
+public class HeadImageView extends android.support.v7.widget.AppCompatImageView {
     private Paint paint = new Paint();
 
     public HeadImageView(Context context) {

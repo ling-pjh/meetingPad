@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.arcsoft.facerecognition.AFR_FSDKEngine;
 import com.example.meetingpad.Service.StateService;
+import com.example.meetingpad.Service.TimerService;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FreeActivity extends AppCompatActivity {
 
@@ -46,6 +49,7 @@ public class FreeActivity extends AppCompatActivity {
         timeTV=(TextView)findViewById(R.id.tv_meeting_time_in_free);
         informationTV=(TextView)findViewById(R.id.tv_meeting_information_in_free);
         goMoreMeetingView=(View)findViewById(R.id.go_more_meeting_view_in_free);
+
 
     }
 

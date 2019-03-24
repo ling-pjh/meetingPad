@@ -175,7 +175,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         mCamera = Camera.open(mCameraID);
         try {
             Camera.Parameters parameters = mCamera.getParameters();
-            parameters.setPreviewSize(mWidth, mHeight);
+            parameters.setPreviewSize(mGLSurfaceView.getWidth(), mGLSurfaceView.getHeight());
             parameters.setPreviewFormat(mFormat);
 
             for( Camera.Size size : parameters.getSupportedPreviewSizes()) {
@@ -199,7 +199,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 //            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 //            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
 //            parameters.setColorEffect(Camera.Parameters.EFFECT_NONE);
-//            mCamera.setParameters(parameters);
+            mCamera.setParameters(parameters);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -466,7 +466,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             tvMeetingRoomId=(TextView)findViewById(R.id.tv_meeting_room_id_checking);
             tvMeetingRoomId.setText(getIntent().getStringExtra("meetingRoomId"));
 
-            for(i=0;i<10;i++){
+            for(i=0;i<5;i++){
                 checkedPeople.add(new PersonLight());
                 notCheckPeople.add(new PersonLight());
             }
@@ -510,10 +510,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         mCameraRotate = 180;
 //		mCameraMirror = getIntent().getIntExtra("Camera", 0) == 0 ? GLES2Render.MIRROR_NONE : GLES2Render.MIRROR_X;
         mCameraMirror = GLES2Render.MIRROR_NONE;
-        mWidth = 640;
-        mHeight = 360;
-        mFormat = ImageFormat.NV21;
-        mHandler = new Handler();
+
 
         mGLSurfaceView = (CameraGLSurfaceView) findViewById(R.id.glsurfaceView);
         mGLSurfaceView.setOnTouchListener(this);
@@ -521,6 +518,12 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         mSurfaceView.setOnCameraListener(this);
         mSurfaceView.setupGLSurafceView(mGLSurfaceView, true, mCameraMirror, mCameraRotate);
         mSurfaceView.debug_print_fps(true, false);
+
+        mWidth = mGLSurfaceView.getWidth();
+        mHeight = mGLSurfaceView.getHeight();
+        mFormat = ImageFormat.NV21;
+        mHandler = new Handler();
+
 
         //snap
         mTextView = (TextView) findViewById(R.id.textView);

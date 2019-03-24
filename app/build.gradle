@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.meetingpad"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -37,4 +37,6 @@ dependencies {
     implementation 'com.guo.android_extend:android-extend:1.0.6'
     implementation 'com.squareup.okhttp3:okhttp:3.0.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.makeramen:roundedimageview:2.2.1'
+
 }
