@@ -5,12 +5,11 @@
     android:layout_height="100dp"
     android:gravity="center">
 
-    <ImageView
+    <com.example.meetingpad.HeadImageView
         android:id="@+id/image_in_head_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/background_for_head_image"
-        android:src="@drawable/ic_account_circle_black_30dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/head_image1" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
