@@ -17,46 +17,47 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_weight="70">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="设置会议室ID"
-            android:textSize="24sp"
-            android:gravity="center"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="A001"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:gravity="center"
-            android:id="@+id/edit_text_meeting_room_id"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="确定"
-            android:id="@+id/btn_ok1"
-            android:background="#009688"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="确定并启动签到中Activity"
-            android:id="@+id/btn_ok2"
-            android:background="#009688"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="确定并启动会议进行中Activity"
-            android:id="@+id/btn_ok3"
-            android:background="#009688"
-            android:textColor="#ffffff"
-            android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="设置会议室ID"
+                android:textSize="30sp"
+                android:gravity="center"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CR301"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:id="@+id/edit_text_meeting_room_id"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:id="@+id/btn_ok1"
+                android:background="#009688"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                android:layout_marginBottom="10dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="确定并启动签到中Activity"
+                android:id="@+id/btn_ok2"
+                android:background="#009688"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                android:layout_marginBottom="10dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="确定并启动会议进行中Activity"
+                android:id="@+id/btn_ok3"
+                android:background="#009688"
+                android:textColor="#ffffff"
+                android:textSize="24sp"/>
     </LinearLayout>
     <View
         android:layout_width="0dp"

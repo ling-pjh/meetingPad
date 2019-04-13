@@ -1,5 +1,9 @@
 package com.example.meetingpad.entity;
 
+
+
+import android.text.style.TtsSpan;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,9 +82,9 @@ public class Event {
 			eve.startDate = startYear+"-"+startMonth+"-"+startDay;
 			eve.startTime = startHour+":"+startMin;
 			eve.endTime = endHour+":"+endMin;
-			//FIXME 字符串的startTime等都是对的，但这里的有谜之时差，而且开始和结束时间竟然是反的
-			eve.endTimeDate = new Date(startYear-1900,startMonth-1,startDay,startHour,startMin);
-			eve.startTimeDate = new Date(startYear-1900,startMonth-1,startDay,endHour,endMin);
+			//FIXME 字符串的startTime等都是对的，但这里的有谜之时差
+			eve.startTimeDate = new Date(startYear-1900,startMonth-1,startDay,startHour,startMin);
+			eve.endTimeDate = new Date(startYear-1900,startMonth-1,startDay,endHour,endMin);
 			try {
 				JSONObject meeting = event.getJSONObject("meeting");
 				eve.meeting = Meeting.fromJSONObject(meeting);

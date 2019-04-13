@@ -22,9 +22,11 @@ public class OKHTTP {
     public final static int WRITE_TIMEOUT = 60;
     public final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public final static String BASE_URL_SIMULATOR = "http://10.0.2.2:8080/face_meeting";
-    public final static String BASE_URL_APP = "http://192.168.191.1:8080/face_meeting";
+    public final static String BASE_URL_APP = "http://101.132.72.223:8080/face_meeting";
+    public final static String BASE_URL_APP_LOCAL = "http://192.168.191.1:8080/facemeeting";
     public final static String BASE_URL_TEST = "http://127.0.0.1:8080/face_meeting";
     public static String BASE_URL = BASE_URL_APP;
+    public static String BASE_URL_LOCAL=BASE_URL_APP_LOCAL;
 
     public static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
@@ -33,6 +35,7 @@ public class OKHTTP {
             .build();
 
     ///异步post请求方法
+
     public static void post(String subUrl, String json, Callback callback)
     {
         System.err.println("OKtest");
@@ -76,6 +79,23 @@ public class OKHTTP {
         RequestBody body=builder.build();
         Request request = new Request.Builder()
                 .url(BASE_URL+subUrl)
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(callback);//callback中从request取数据
+    }
+    public static void postFormLocal(String subUrl, HashMap<String,String> paramsMap
+            , Callback callback)
+    {
+        FormBody.Builder builder = new FormBody.Builder();
+        for (String key : paramsMap.keySet()) {
+            //追加表单信息
+            Log.i("OKHTTP,paramsMap",key+":"+paramsMap.get(key));
+            builder.add(key, paramsMap.get(key));
+        }
+        OkHttpClient client=new OkHttpClient();
+        RequestBody body=builder.build();
+        Request request = new Request.Builder()
+                .url(BASE_URL_LOCAL+subUrl)
                 .post(body)
                 .build();
         client.newCall(request).enqueue(callback);//callback中从request取数据

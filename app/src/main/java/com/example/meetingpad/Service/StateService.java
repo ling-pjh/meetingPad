@@ -37,6 +37,13 @@ public class StateService extends Service {
     private static Timer timer = null;
     private static String rId;
 
+    Thread startChecking=new Thread(){
+        @Override
+        public void run() {
+            super.run();
+
+        }
+    };
     public StateService() {
     }
 
@@ -66,45 +73,7 @@ public class StateService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         //我们在onStartCommand方法中通过intent参数获取activity传过来的值。
-        rId =intent.getStringExtra("rId");//FIXME 读到的是空值，所以这里暂时没采用
-        Log.i(TAG,"call onStartCommand...");
-        //向服务器请求该房间的EventList
-        HashMap<String, String> map = new HashMap();
-        map.put("rId", rId);//传进来的rId
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date(System.currentTimeMillis());
-        map.put("date", simpleDateFormat.format(date));
-        final Callback scheduleEvents = new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-//            toastHandler.sendEmptyMessage(REQUESTFAIL);
-                System.err.println("请求出错");
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-//            toastHandler.sendEmptyMessage(REQUESTSUCCESS);
-                System.err.println("请求成功");
-                if (response != null) {
-                    String jsStr = response.body().string();//查看返回的response内容
-                    System.err.println(jsStr);
-                    try {
-                        JSONTokener jsonParser = new JSONTokener(jsStr);
-                        JSONObject noteResult = (JSONObject) jsonParser.nextValue();
-                        JSONArray joeventList = noteResult.getJSONArray("data");
-                        List<Event> elist = Event.fromJSONArray(joeventList);
-                        //按照eventList schedule切换事件
-                        schedule(elist);//TODO 成员变量eventList是否还需要？
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                toastHandler.sendEmptyMessage(REQUESTNULL);
-                    System.err.println("null!");
-                }
-            }
-        };
-        OKHTTP.postForm("/pad/findEventList.do",map,scheduleEvents);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -118,23 +87,6 @@ public class StateService extends Service {
         timer	= null;
     }
 
-    private void schedule(List<Event> eventList){
-        timer = new Timer();
 
-        for(final Event e:eventList){
-            Log.i(TAG,"schedule："+e.toString());
-            System.out.println("schedule：Event"+e.toString());
-            timer.schedule(new TimerTask() {//转换为签到中时的任务
-                @Override
-                public void run() {
-                    Intent intent=new Intent(StateService.this, CheckingActivity.class);
-                    intent.putExtra("mNo",e.mNo);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Log.i(TAG,"toCheckInState");
-                    getApplication().startActivity(intent);
-                }
-            },new Date(e.startTimeDate.getTime()-6000));//设置开会前10分钟开启签到//现在是6秒
-        }
-    }
 
 }

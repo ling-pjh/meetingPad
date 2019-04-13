@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnOk2=(Button)findViewById(R.id.btn_ok2);
         btnOk2.setOnClickListener(this);
-//      btnOk2.setVisibility(View.GONE);
+        btnOk2.setVisibility(View.GONE);
 
         btnOk3=(Button)findViewById(R.id.btn_ok3);
 //       btnOk3.setOnClickListener(this);
@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         editTextMeetingRoomID=(EditText)findViewById(R.id.edit_text_meeting_room_id);
-
-
-
 
 
 

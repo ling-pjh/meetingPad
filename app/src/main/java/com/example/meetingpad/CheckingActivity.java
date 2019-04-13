@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.style.UpdateAppearance;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.arcsoft.sdk_demo.DetecterActivity;
 import com.example.meetingpad.Service.OKHTTP;
+import com.example.meetingpad.entity.Attend;
 import com.guo.android_extend.tools.CameraHelper;
 import com.guo.android_extend.widget.CameraFrameData;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
@@ -83,6 +85,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
 
     private final int UPDATE_IMAGES=0;
+    private final int UPDATE_MEEING_INFORMATION=1;
+    private final int NEW_PERSON_CHECKED=2;
+    private final int ALREADY_CHECKED=3;
     private final String TAG = this.getClass().getSimpleName();
     private int mWidth, mHeight, mFormat;
     private CameraSurfaceView mSurfaceView;
@@ -108,10 +113,20 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
+            Toast toast;
             switch (msg.what){
                 case UPDATE_IMAGES:
                     checkedPeopleAdapter.notifyDataSetChanged();
                     notCheckPeopleAdapter.notifyDataSetChanged();
+                    break;
+                case UPDATE_MEEING_INFORMATION:
+                    tvMeetingInforMationInChecking.setText(meetingDetail.getmInfo());
+                    break;
+                case NEW_PERSON_CHECKED:
+                case ALREADY_CHECKED:
+                    toast=Toast.makeText(CheckingActivity.this,(String)msg.obj,Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
                     break;
 
             }
@@ -129,7 +144,6 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
     Runnable hide = new Runnable() {
         @Override
         public void run() {
-            mTextView.setAlpha(0.5f);
             mImageView.setImageAlpha(128);
             isPostted = false;
         }
@@ -148,20 +162,20 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.imageButton) {
-            if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
-                mCameraRotate = 0;
-                mCameraMirror = GLES2Render.MIRROR_NONE;
-            } else {
-                mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
-                mCameraRotate =  0;
-                mCameraMirror = GLES2Render.MIRROR_NONE;
-            }
-            mSurfaceView.resetCamera();
-            mGLSurfaceView.setRenderConfig(mCameraRotate, mCameraMirror);
-            mGLSurfaceView.getGLES2Render().setViewDisplay(mCameraMirror, mCameraRotate);
-        }
+//        if (view.getId() == R.id.imageButton) {
+//            if (mCameraID == Camera.CameraInfo.CAMERA_FACING_BACK) {
+//                mCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
+//                mCameraRotate = 0;
+//                mCameraMirror = GLES2Render.MIRROR_NONE;
+//            } else {
+//                mCameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
+//                mCameraRotate =  0;
+//                mCameraMirror = GLES2Render.MIRROR_NONE;
+//            }
+//            mSurfaceView.resetCamera();
+//            mGLSurfaceView.setRenderConfig(mCameraRotate, mCameraMirror);
+//            mGLSurfaceView.getGLES2Render().setViewDisplay(mCameraMirror, mCameraRotate);
+//        }
     }
 
     @Override
@@ -226,7 +240,16 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         AFT_FSDKError err = engine.AFT_FSDK_FaceFeatureDetect(data, width, height, AFT_FSDKEngine.CP_PAF_NV21, result);
         Log.d(TAG, "AFT_FSDK_FaceFeatureDetect =" + err.getCode());
         Log.d(TAG, "Face=" + result.size());
-
+        if(result.size()==0){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mTextView.setText("未识别");
+                    mTextView.setTextColor(Color.RED);
+                    mTextView1.setText("");
+                }
+            });
+        }
         for (AFT_FSDKFace face : result) {
             Log.d(TAG, "Face:" + face.toString());
         }
@@ -236,8 +259,8 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                 mImageNV21 = data.clone();
             } else {
                 if (!isPostted) {
-                    mHandler.removeCallbacks(hide);
-                    mHandler.postDelayed(hide, 2000);
+//                    mHandler.removeCallbacks(hide);
+//                    mHandler.postDelayed(hide, 2000);
                     isPostted = true;
                 }
             }
@@ -273,9 +296,10 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         List<FaceDB.FaceRegist> mResgist = FaceDB.mRegister;
         List<ASAE_FSDKFace> face1 = new ArrayList<>();
         List<ASGE_FSDKFace> face2 = new ArrayList<>();
-
+        private int times=0;
         @Override
         public void setup() {
+
             AFR_FSDKError error = engine.AFR_FSDK_InitialEngine(FaceDB.appid, FaceDB.fr_key);
             Log.d(TAG, "AFR_FSDK_InitialEngine = " + error.getCode());
             error = engine.AFR_FSDK_GetVersion(version);
@@ -288,7 +312,7 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             if (mImageNV21 != null) {
                 final int rotate = mCameraRotate;
 
-                long time = System.currentTimeMillis();
+                final long time = System.currentTimeMillis();
                 AFR_FSDKError error = engine.AFR_FSDK_ExtractFRFeature(mImageNV21, mWidth, mHeight, AFR_FSDKEngine.CP_PAF_NV21, mAFT_FSDKFace.getRect(), mAFT_FSDKFace.getDegree(), result);
                 Log.d(TAG, "AFR_FSDK_ExtractFRFeature cost :" + (System.currentTimeMillis() - time) + "ms");
                 Log.d(TAG, "Face=" + result.getFeatureData()[0] + "," + result.getFeatureData()[1] + "," + result.getFeatureData()[2] + "," + error.getCode());
@@ -296,63 +320,110 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 //                HashMap<String,String> faceRequestMap=new HashMap<>();
 //
 //                String base64Str = Base64.encodeToString(result.getFeatureData(), Base64.NO_WRAP);
+
 //                faceRequestMap.put("face",base64Str);
 //                OKHTTP.postForm("/checkin/recognize.do",faceRequestMap,faceRequestCallBack);
 
 
-                AFR_FSDKMatching score = new AFR_FSDKMatching();
+                final AFR_FSDKMatching score = new AFR_FSDKMatching();
                 float max = 0.0f;
                 String name = null;
 
 
 
+                System.out.println("进入if(meetingDetail!=null前");
                 if(meetingDetail!=null) {
-                    for (PersonLight p : meetingDetail.getmAttendList()) {
+                    //meetingDetail.getmAttendList()
+                    for (final PersonLight personInMeeting : peopleInMeeting ) {
                         AFR_FSDKFace face = new AFR_FSDKFace();
-                        if(p.getpFace()==null){
-                            System.err.println("nuuuuuullll");
-                        }else{
-                            System.err.println("nooooot");
-                        }
-                        face.setFeatureData(p.getpFace());
+                        System.out.println("检查是否在会议中循环");
+                        face.setFeatureData(personInMeeting.getpFace());
                         error = engine.AFR_FSDK_FacePairMatching(result, face, score);
                         Log.d(TAG, "MyFace=" + result.getFeatureData()[0] + "," + result.getFeatureData()[1] + "," + result.getFeatureData()[2] + "," + error.getCode());
 //                        Log.d(TAG, "Compare-face=" + face.getFeatureData()[0] + "," + face.getFeatureData()[1] + "," + face.getFeatureData()[2] + "," + error.getCode());
-                        Log.d(TAG, "Score:" + score.getScore() + ",AFR_FSDK_FacePairMatching-" + error.getCode());
+                        Log.d(TAG, "ThisIsInPersonLightMatchingScore:" + score.getScore() + ",AFR_FSDK_FacePairMatching-" + error.getCode());
                         if(score.getScore()>=0.6){
-                            int i;
-                            List<PersonLight> newNotCheckPeople=new ArrayList<>();
-                            for(i=0;i<notCheckPeople.size();i++)
-                                newNotCheckPeople.add(notCheckPeople.get(i));
-                            for(i=0;i<notCheckPeople.size();i++){
-                                if(p.getpId()==notCheckPeople.get(i).getpId()) {
-                                    boolean exist=false;
-                                    for(PersonLight p1:checkedPeople){
-                                        if(p1.getpId()==p.getpId()){
-                                            exist=true;
+                            times=0;
+                            System.out.println("匹配成功");
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mTextView.setTextColor(Color.GREEN);
+                                    mTextView.setText("姓名:"+personInMeeting.getpName());
+                                    mTextView.setTextSize(20);
+                                    mTextView1.setTextColor(Color.GREEN);
+                                    mTextView1.setText("置信度：" + (float)((int)(score.getScore() * 1000)) / 1000.0);
+                                    mTextView1.setTextSize(20);
+                                }
+                            });
+                            mHandler.removeCallbacks(hide);
+                            System.out.println("removeCallbacks后");
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int i;
+                                    System.out.println("进入改变签到状态的进程");
+                                    List<PersonLight> newNotCheckPeople=new ArrayList<>();
+                                    for(i=0;i<notCheckPeople.size();i++)
+                                        newNotCheckPeople.add(notCheckPeople.get(i));
+                                    for(PersonLight personInNewNotCheck:newNotCheckPeople){
+                                        if(personInMeeting.getpId()==personInNewNotCheck.getpId()) {
+                                            boolean exist=false;
+                                            for(PersonLight personInChecked:checkedPeople){
+                                                if(personInChecked.getpId()==personInMeeting.getpId()){
+                                                    exist=true;
+                                                    break;
+                                                }
+                                            }
+                                            if(!exist){
+                                                checkedPeople.add(personInNewNotCheck);
+                                                Message msg=new Message();
+                                                msg.what=NEW_PERSON_CHECKED;
+                                                msg.obj=personInMeeting.getpName()+"签到成功";
+                                                myHandler.sendMessage(msg);
+                                                notCheckPeople.remove(personInNewNotCheck);
+                                                HashMap<String,String> map=new HashMap<>();
+                                                map.put("mNo",meetingDetail.getmNo()+"");
+                                                map.put("pId",personInMeeting.getpId());
+                                                OKHTTP.postFormLocal("/checkin/checkin.do", map, personCheck);
+                                            }else{
+                                                Message msg=new Message();
+                                                msg.what=ALREADY_CHECKED;
+                                                msg.obj=personInMeeting.getpName()+"已经签到过";
+                                                myHandler.sendMessage(msg);
+                                            }
+                                            myHandler.sendEmptyMessage(UPDATE_IMAGES);
+                                            System.out.println("交换后");
                                         }
                                     }
-                                    if(!exist)checkedPeople.add(notCheckPeople.get(i));
-
-                                    newNotCheckPeople.remove(i);
                                 }
+                            });
+                        }
+                        else{
+                            times++;
+                            if(times==6){
+                                mHandler.post(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      mTextView.setText("未识别");
+                                                      mTextView.setTextColor(Color.RED);
+                                                      mTextView1.setText("");
+                                                  }
+                                });
                             }
-                            notCheckPeopleAdapter.setPersons(newNotCheckPeople);
-                            checkedPeopleAdapter.setPersons(checkedPeople);
-                            myHandler.sendEmptyMessage(UPDATE_IMAGES);
                         }
                     }
                 }
-                for (FaceDB.FaceRegist fr : mResgist) {
-                    for (AFR_FSDKFace face : fr.mFaceList.values()) {
-                        error = engine.AFR_FSDK_FacePairMatching(result, face, score);
-                        Log.d(TAG,  "Score:" + score.getScore() + ", AFR_FSDK_FacePairMatching=" + error.getCode());
-                        if (max < score.getScore()) {
-                            max = score.getScore();
-                            name = fr.mName;
-                        }
-                    }
-                }
+//                for (FaceDB.FaceRegist fr : mResgist) {
+//                    for (AFR_FSDKFace face : fr.mFaceList.values()) {
+//                        error = engine.AFR_FSDK_FacePairMatching(result, face, score);
+//                        Log.d(TAG,  "Score:" + score.getScore() + ", AFR_FSDK_FacePairMatching=" + error.getCode());
+//                        if (max < score.getScore()) {
+//                            max = score.getScore();
+//                            name = fr.mName;
+//                        }
+//                    }
+//                }
 
                 //age & gender
                 face1.clear();
@@ -383,39 +454,39 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     final float max_score = max;
                     Log.d(TAG, "fit Score:" + max + ", NAME:" + name);
                     final String mNameShow = name;
-                    mHandler.removeCallbacks(hide);
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTextView.setAlpha(1.0f);
-                            mTextView.setText(mNameShow);
-                            mTextView.setTextColor(Color.RED);
-                            mTextView1.setVisibility(View.VISIBLE);
-                            mTextView1.setText("置信度：" + (float)((int)(max_score * 1000)) / 1000.0);
-                            mTextView1.setTextColor(Color.RED);
-                            mImageView.setRotation(rotate);
-                            mImageView.setScaleY(-mCameraMirror);
-                            mImageView.setImageAlpha(255);
-                            mImageView.setImageBitmap(bmp);
-                        }
-                    });
+//                    mHandler.removeCallbacks(hide);
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            mTextView.setAlpha(1.0f);
+////                            mTextView.setText(mNameShow);
+////                            mTextView.setTextColor(Color.RED);
+////                            mTextView1.setVisibility(View.VISIBLE);
+////                            mTextView1.setText("置信度：" + (float)((int)(max_score * 1000)) / 1000.0);
+////                            mTextView1.setTextColor(Color.RED);
+////                            mImageView.setRotation(rotate);
+////                            mImageView.setScaleY(-mCameraMirror);
+////                            mImageView.setImageAlpha(255);
+////                            mImageView.setImageBitmap(bmp);
+//                        }
+//                    });
                 } else {
                     final String mNameShow = "未识别";
-                    CheckingActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTextView.setAlpha(1.0f);
-                            mTextView1.setVisibility(View.VISIBLE);
-                            mTextView1.setText( gender + "," + age);
-                            mTextView1.setTextColor(Color.RED);
-                            mTextView.setText(mNameShow);
-                            mTextView.setTextColor(Color.RED);
-                            mImageView.setImageAlpha(255);
-                            mImageView.setRotation(rotate);
-                            mImageView.setScaleY(-mCameraMirror);
-                            mImageView.setImageBitmap(bmp);
-                        }
-                    });
+//                    CheckingActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            mTextView.setAlpha(1.0f);
+////                            mTextView1.setVisibility(View.VISIBLE);
+////                            mTextView1.setText( gender + "," + age);
+////                            mTextView1.setTextColor(Color.RED);
+////                            mTextView.setText(mNameShow);
+////                            mTextView.setTextColor(Color.RED);
+////                            mImageView.setImageAlpha(255);
+////                            mImageView.setRotation(rotate);
+////                            mImageView.setScaleY(-mCameraMirror);
+////                            mImageView.setImageBitmap(bmp);
+//                        }
+//                    });
                 }
                 mImageNV21 = null;
             }
@@ -430,10 +501,10 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
         }
     }
 
-    private TextView tvMeetingRoomId;
+    private TextView tvMeetingRoomId,tvMeetingInforMationInChecking;
     private RecyclerView checkedPeopleImages,notCheckPeopleImages;
 
-    private List<PersonLight> checkedPeople=new ArrayList<PersonLight>(),notCheckPeople=new ArrayList<PersonLight>();
+    private List<PersonLight> peopleInMeeting,checkedPeople=new ArrayList<PersonLight>(),notCheckPeople=new ArrayList<PersonLight>();
     private AttendMeetingListAdapter checkedPeopleAdapter=new AttendMeetingListAdapter(this,checkedPeople);
     private AttendMeetingListAdapter notCheckPeopleAdapter=new AttendMeetingListAdapter(this,notCheckPeople);
     private TextView infomationTV;
@@ -447,16 +518,17 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.i("CheckingActivity","toInMeetingState");
             intent.putExtra("mNo",mNo);
-//            startActivity(intent);
-//            finish();
+            startActivity(intent);
+            finish();
         }
     };
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             //获取参数
-            mNo=getIntent().getIntExtra("mNo",2);
+            mNo=getIntent().getIntExtra("mNo",33);
             //发请求查到meeting
             HashMap<String, String> map = new HashMap();
             map.put("mNo", mNo+"");//传进来的mNo
@@ -465,22 +537,17 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
             //定时操作
             Timer timer = new Timer();
-            //TODO 设置周期性刷新签到表
-            timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+6000));//设置十分钟后转入InMeeting//现在设置的是6秒
+            //TODO 设置周期性刷新签到
 
+            //timer.schedule(toInMeetingState,new Date(System.currentTimeMillis()+20000));//设置十分钟后转入InMeeting//现在设置的是6秒
             setContentView(R.layout.activity_checking);
             getSupportActionBar().setTitle("签到中");
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             int i;
             tvMeetingRoomId=(TextView)findViewById(R.id.tv_meeting_room_id_checking);
-            tvMeetingRoomId.setText(getIntent().getStringExtra("meetingRoomId"));
-
-            for(i=0;i<5;i++){
-                checkedPeople.add(new PersonLight());
-                notCheckPeople.add(new PersonLight());
-            }
-
+            tvMeetingRoomId.setText("会议ID："+mNo);
+            tvMeetingInforMationInChecking=(TextView)findViewById(R.id.tv_meeting_information_in_checking);
 
 
             checkedPeopleAdapter=new AttendMeetingListAdapter(this,checkedPeople);
@@ -531,9 +598,9 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 
         mWidth = mGLSurfaceView.getWidth();
         mHeight = mGLSurfaceView.getHeight();
-        mFormat = ImageFormat.NV21;
+        //mFormat = ImageFormat.NV21;
+        mFormat=ImageFormat.DEPTH16;
         mHandler = new Handler();
-
 
         //snap
         mTextView = (TextView) findViewById(R.id.textView);
@@ -640,6 +707,35 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
 //        }
 //    };
 
+    final Callback personCheck=new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+            System.err.println("开启门禁请求出错");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            System.err.println("开启门禁请求成功");
+            if (response != null) {
+                String jsStr = response.body().string();//查看返回的response内容
+                System.err.println(jsStr);
+//                try {
+//                    JSONTokener jsonParser = new JSONTokener(jsStr);
+////                    JSONObject noteResult = (JSONObject) jsonParser.nextValue();
+////                    JSONObject joAttend = noteResult.getJSONObject("data");
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+            } else {
+//                toastHandler.sendEmptyMessage(REQUESTNULL);
+                System.err.println("null!");
+            }
+        }
+    };
+
+
     final Callback fillMeetingDetail = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
@@ -661,8 +757,20 @@ public class CheckingActivity extends AppCompatActivity implements OnCameraListe
                     JSONObject joMeeting = noteResult.getJSONObject("data");
                     meetingDetail = Meeting.fromJSONObjectDetail(joMeeting);
                     notCheckPeople=meetingDetail.mAttendList;
+                    peopleInMeeting=new ArrayList<PersonLight>();
+                    for(PersonLight p : meetingDetail.mAttendList){
+                        PersonLight newPerson=new PersonLight();
+                        newPerson.setpDept(p.getpDept());
+                        newPerson.setpFace(p.getpFace());
+                        newPerson.setpIcon(p.getpIcon());
+                        newPerson.setpId(p.getpId());
+                        newPerson.setpName(p.getpName());
+                        newPerson.setpRole(p.getpRole());
+                        peopleInMeeting.add(newPerson);
+                    }
                     notCheckPeopleAdapter.setPersons(notCheckPeople);
                     myHandler.sendEmptyMessage(UPDATE_IMAGES);
+                    myHandler.sendEmptyMessage(UPDATE_MEEING_INFORMATION);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

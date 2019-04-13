@@ -11,6 +11,7 @@ import android.os.Process;
 import android.widget.Toast;
 
 import com.example.meetingpad.Application;
+import com.example.meetingpad.CheckingActivity;
 import com.example.meetingpad.MainActivity;
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class PermissionAcitivity extends Activity {
 						@Override
 						public void run() {
 							mProgressDialog.cancel();
-							Intent intent = new Intent(PermissionAcitivity.this, MainActivity.class);
+							Intent intent = new Intent(PermissionAcitivity.this, CheckingActivity.class);
 							startActivityForResult(intent, PERMISSION_REQ);
 						}
 					});
